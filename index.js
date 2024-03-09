@@ -2,6 +2,7 @@ import  express  from "express";
 import dotenv from 'dotenv'
 import cors from 'cors'
 import userRoute from "./routes/userRoute.js";
+import userDetail from "./routes/userDetailRoute.js"
 import bodyParser from "body-parser";
 
 const app = express()
@@ -14,6 +15,7 @@ app.use(cors({
 
 app.use(express.json())
 app.use('/auth', userRoute)
+app.use('/user', userDetail)
 app.use(bodyParser.json({ limit: "30mb", extended: true }))
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }))
 
