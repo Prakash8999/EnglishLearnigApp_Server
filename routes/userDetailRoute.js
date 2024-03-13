@@ -5,7 +5,7 @@ import express from 'express'
 const router = express.Router()
 
 
-router.get('/:id', VerifyToken, userDetail)
+router.get('/profile', VerifyToken, userDetail)
 router.patch('/updateuser', VerifyToken, updateUser)
 
 export default router

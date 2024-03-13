@@ -2,11 +2,9 @@ import Prisma from "../client.js";
 
 export const userDetail = async (req, res) => {
 	try {
-		const { id } = req.params;
-
-		const user = await Prisma.user.findFirst({
+	const user = await Prisma.user.findFirst({
 			where: {
-				id: id
+				id: req.user.id.toString()
 			},
 			select: {
 				name: true,
