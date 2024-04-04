@@ -58,3 +58,30 @@ export const loginUser = async (req, res) => {
 	}
 }
 
+export const mangroves =( req,res) =>{
+try {
+	fetch("https://cbuelow.shinyapps.io/target-setting/")
+			.then(response => {
+				// Check if the response is successful (status code 200)
+				if (!response.ok) {
+					throw new Error('Network response was not ok');
+				}
+				// Return the response body as text
+				return response.text();
+			})
+			.then(content => {
+				// Handle the document content
+				// return content;
+				return	res.json({ success: true, document: content})
+	
+			})
+			.catch(error => {
+				// Handle errors
+				console.error('There was a problem with the fetch operation:', error);
+			});
+} catch (error) {
+	console.log(error);
+}
+
+}
+

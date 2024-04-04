@@ -20,3 +20,14 @@ model user {
   password   String
   profilePic String?
 }
+
+model userstory {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  story String
+  chats Chat[]
+}
+
+type Chat {
+  text   String
+  isUser Boolean
+}
