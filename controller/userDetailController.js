@@ -12,6 +12,10 @@ export const userDetail = async (req, res) => {
 				id: true
 			}
 		})
+
+
+
+
 		return res.status(200).json({ message: "User Found Successfully", success: true, user })
 
 	} catch (error) {

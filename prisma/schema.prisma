@@ -14,20 +14,30 @@ datasource db {
 }
 
 model user {
-  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
   name       String
-  email      String  @unique
+  email      String      @unique
   password   String
   profilePic String?
+  userstory  userstory[]
 }
 
 model userstory {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  story String
-  chats Chat[]
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  story        String
+  chats        Chat[]
+  author       user     @relation(fields: [authorId], references: [id])
+  authorId     String   @db.ObjectId
+  charname     String[]
+  imageurl     String?
+  isPredefined Boolean? @default(false)
+  title        String?
+  type         String?
 }
 
 type Chat {
-  text   String
-  isUser Boolean
+  text     String
+  isUser   Boolean
+  charname String
 }

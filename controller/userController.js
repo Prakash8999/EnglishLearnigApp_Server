@@ -1,6 +1,7 @@
 import Prisma from "../client.js";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import stories from '../Data/StoryData.js'
 
 export const createUser = async (req, res) => {
 
@@ -16,22 +17,32 @@ export const createUser = async (req, res) => {
 
 		const passwordHashed = await bcrypt.hash(password, 10)
 
-		 await Prisma.user.create({
+		let NewUser = await Prisma.user.create({
 			data: {
 				name: name,
 				email: email,
 				password: passwordHashed
+			},
+			select: {
+				id: true
 			}
 		})
 
+		const modStories = stories.map((story) => { return { ...story, authorId: NewUser.id, chats: [] } })
+		
+		const createdStories = await Prisma.userstory.createMany({
+			data: modStories,
 
-	return	res.json({ success: true, message: "User Created Successfully." })
+		});
+		
+		return res.json({ success: true, message: "User Created Successfully.", stories: createdStories })
 	} catch (error) {
-
+		console.log(error);
 		return res.json({ success: false, message: error })
 	}
 
 }
+
 
 
 
@@ -50,17 +61,17 @@ export const loginUser = async (req, res) => {
 		if (!isMatch) return res.status(400).json({ message: "Invalid email or password" })
 		const token = jwt.sign({ id: user.id, }, process.env.JWT_SECRET)
 		delete user.password;
-		return	res.json({ success: true, message: "Logged in Successfully.",  token  })
-	
+		return res.json({ success: true, message: "Logged in Successfully.", token })
+
 
 	} catch (error) {
-	return	res.status(500).json({success: false, message: error })
+		return res.status(500).json({ success: false, message: error })
 	}
 }
 
-export const mangroves =( req,res) =>{
-try {
-	fetch("https://cbuelow.shinyapps.io/target-setting/")
+export const mangroves = (req, res) => {
+	try {
+		fetch("https://cbuelow.shinyapps.io/target-setting/")
 			.then(response => {
 				// Check if the response is successful (status code 200)
 				if (!response.ok) {
@@ -72,16 +83,16 @@ try {
 			.then(content => {
 				// Handle the document content
 				// return content;
-				return	res.json({ success: true, document: content})
-	
+				return res.json({ success: true, document: content })
+
 			})
 			.catch(error => {
 				// Handle errors
-				console.error('There was a problem with the fetch operation:', error);
+				console.error('There was a problem with the fetch operation:', error);
 			});
-} catch (error) {
-	console.log(error);
-}
+	} catch (error) {
+		console.log(error);
+	}
 
 }
 
